@@ -34,6 +34,7 @@ function removeWall(direction: Direction, cellCurrent: Cell, cellNeighbour: Cell
     }
 }
 
+
 export class Maze extends React.Component<MazeProps, MazeState> {
     constructor(props: MazeProps) {
         super(props);
@@ -49,24 +50,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
         for (let i = 0, maxI = 1.4 * this.props.maxX * this.props.maxY; i < maxI; ++i) {
             let x = Math.floor(Math.random() * this.props.maxX);
             let y = Math.floor(Math.random() * this.props.maxY);
-            let moves: { d: Direction, dx: number, dy: number }[] = [
-                {d: 'up', dx: 0, dy: -1},
-                {d: 'right', dx: 1, dy: 0},
-                {d: 'down', dx: 0, dy: 1},
-                {d: 'left', dx: -1, dy: 0},
-            ];
-            let neighbours: { d: Direction, nx: number, ny: number }[] = [];
-            moves.forEach(({d, dx, dy}) => {
-                let nx = x + dx;
-                let ny = y + dy;
-                if (
-                    (0 <= nx) && (nx < this.props.maxX) &&
-                    (0 <= ny) && (ny < this.props.maxY)
-                ) {
-                    neighbours.push({d, ny, nx});
-                }
-            });
-            let neighbour = neighbours[Math.floor(Math.random() * neighbours.length)];
+            let neighbour = this.getRandomNeighbour(x, y);
             let direction = neighbour.d;
             let cellCurrent = cells[y][x];
             let cellNeighbour = cells[neighbour.ny][neighbour.nx];
@@ -77,6 +61,28 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             cells
         };
     }
+
+    private getRandomNeighbour(x: number, y: number) {
+        let moves: { d: Direction, dx: number, dy: number }[] = [
+            {d: 'up', dx: 0, dy: -1},
+            {d: 'right', dx: 1, dy: 0},
+            {d: 'down', dx: 0, dy: 1},
+            {d: 'left', dx: -1, dy: 0},
+        ];
+        let neighbours: { d: Direction, nx: number, ny: number }[] = [];
+        moves.forEach(({d, dx, dy}) => {
+            let nx = x + dx;
+            let ny = y + dy;
+            if (
+                (0 <= nx) && (nx < this.props.maxX) &&
+                (0 <= ny) && (ny < this.props.maxY)
+            ) {
+                neighbours.push({d, ny, nx});
+            }
+        });
+        return neighbours[Math.floor(Math.random() * neighbours.length)];
+    }
+
 
     render() {
         return <div className='maze--table'>
