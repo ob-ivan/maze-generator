@@ -20,8 +20,8 @@ code {
 
 .maze--cell {
   border: 1px solid white;
-  height: 15px;
-  width: 15px;
+  height: 20px;
+  width: 20px;
 }
 
 .maze--cell__wall-up {
