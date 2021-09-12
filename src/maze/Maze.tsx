@@ -28,14 +28,14 @@ export class Maze extends React.Component<MazeProps, MazeState> {
         for (let i = 0, maxI = this.props.maxX * this.props.maxY; i < maxI; ++i) {
             let x = Math.floor(Math.random() * this.props.maxX);
             let y = Math.floor(Math.random() * this.props.maxY);
-            let directions: { d: Direction, dx: number, dy: number }[] = [
+            let moves: { d: Direction, dx: number, dy: number }[] = [
                 {d: 'up', dx: 0, dy: -1},
                 {d: 'right', dx: 1, dy: 0},
                 {d: 'down', dx: 0, dy: 1},
                 {d: 'left', dx: -1, dy: 0},
             ];
             let neighbours: { d: Direction, nx: number, ny: number }[] = [];
-            directions.forEach(({d, dx, dy}) => {
+            moves.forEach(({d, dx, dy}) => {
                 let nx = x + dx;
                 let ny = y + dy;
                 if (
