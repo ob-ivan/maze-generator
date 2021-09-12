@@ -68,26 +68,30 @@ export class Maze extends React.Component<MazeProps, MazeState> {
     }
 
     private getRandomNeighbour(x: number, y: number): Neighbour {
+        let neighbours = this.getNeighboursInBounds(x, y);
+        return neighbours[Math.floor(Math.random() * neighbours.length)];
+    }
+
+    private getNeighboursInBounds(x: number, y: number) {
         let moves: { d: Direction, dx: number, dy: number }[] = [
-            {d: 'up', dx: 0, dy: -1},
-            {d: 'right', dx: 1, dy: 0},
-            {d: 'down', dx: 0, dy: 1},
-            {d: 'left', dx: -1, dy: 0},
+            { d: 'up', dx: 0, dy: -1 },
+            { d: 'right', dx: 1, dy: 0 },
+            { d: 'down', dx: 0, dy: 1 },
+            { d: 'left', dx: -1, dy: 0 },
         ];
         let neighbours: Neighbour[] = [];
-        moves.forEach(({d, dx, dy}) => {
+        moves.forEach(({ d, dx, dy }) => {
             let nx = x + dx;
             let ny = y + dy;
             if (
                 (0 <= nx) && (nx < this.props.maxX) &&
                 (0 <= ny) && (ny < this.props.maxY)
             ) {
-                neighbours.push({d, ny, nx});
+                neighbours.push({ d, ny, nx });
             }
         });
-        return neighbours[Math.floor(Math.random() * neighbours.length)];
+        return neighbours;
     }
-
 
     render() {
         return <div className='maze--table'>
