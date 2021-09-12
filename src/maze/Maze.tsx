@@ -15,10 +15,10 @@ export class Maze extends React.Component<MazeProps, MazeState> {
         super(props);
         let cells: Cell[][] = [];
 
-        for (let x = 0; x < this.props.maxX; ++x) {
-            cells[x] = [];
-            for (let y = 0; y < this.props.maxY; ++y) {
-                cells[x][y] = new Cell();
+        for (let y = 0; y < this.props.maxY; ++y) {
+            cells[y] = [];
+            for (let x = 0; x < this.props.maxX; ++x) {
+                cells[y][x] = new Cell();
             }
         }
 
