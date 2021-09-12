@@ -62,7 +62,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             }
         }
 
-        for (let i = 0, maxI = this.props.maxX + this.props.maxY; i < maxI; ++i) {
+        for (let i = 0, maxI = 3 * (this.props.maxX + this.props.maxY); i < maxI; ++i) {
             let x = Math.floor(Math.random() * this.props.maxX);
             let y = Math.floor(Math.random() * this.props.maxY);
             while (true) {
