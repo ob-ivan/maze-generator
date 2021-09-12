@@ -13,6 +13,27 @@ interface MazeState {
 
 type Direction = 'up' | 'right' | 'down' | 'left';
 
+function removeWall(direction: Direction, cellCurrent: Cell, cellNeighbour: Cell) {
+    switch (direction) {
+        case "up":
+            cellCurrent.removeWallUp();
+            cellNeighbour.removeWallDown();
+            break;
+        case "right":
+            cellCurrent.removeWallRight();
+            cellNeighbour.removeWallLeft();
+            break;
+        case "down":
+            cellCurrent.removeWallDown();
+            cellNeighbour.removeWallUp();
+            break;
+        case "left":
+            cellCurrent.removeWallLeft();
+            cellNeighbour.removeWallRight();
+            break;
+    }
+}
+
 export class Maze extends React.Component<MazeProps, MazeState> {
     constructor(props: MazeProps) {
         super(props);
@@ -46,24 +67,10 @@ export class Maze extends React.Component<MazeProps, MazeState> {
                 }
             });
             let neighbour = neighbours[Math.floor(Math.random() * neighbours.length)];
-            switch (neighbour.d) {
-                case "up":
-                    cells[y][x].removeWallUp();
-                    cells[neighbour.ny][neighbour.nx].removeWallDown();
-                    break;
-                case "right":
-                    cells[y][x].removeWallRight();
-                    cells[neighbour.ny][neighbour.nx].removeWallLeft();
-                    break;
-                case "down":
-                    cells[y][x].removeWallDown();
-                    cells[neighbour.ny][neighbour.nx].removeWallUp();
-                    break;
-                case "left":
-                    cells[y][x].removeWallLeft();
-                    cells[neighbour.ny][neighbour.nx].removeWallRight();
-                    break;
-            }
+            let direction = neighbour.d;
+            let cellCurrent = cells[y][x];
+            let cellNeighbour = cells[neighbour.ny][neighbour.nx];
+            removeWall(direction, cellCurrent, cellNeighbour);
         }
 
         this.state = {
