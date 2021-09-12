@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-          <Maze maxX={80} maxY={25}/>
+          <Maze maxX={80} maxY={50}/>
       </header>
     </div>
   );

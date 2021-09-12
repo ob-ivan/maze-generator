@@ -29,22 +29,21 @@ export class Maze extends React.Component<MazeProps, MazeState> {
     }
 
     render() {
-        return <table>
+        return <div className='maze--table'>
             {this.state.cells.map((cellRow: Cell[]) =>
-                <tr>
+                <div className='maze--row'>
                     {cellRow.map((cell: Cell) =>
                         <td className={classNames({
-                            'cell': true,
-                            'cell__wall-up': !cell.canWalkUp(),
-                            'cell__wall-right': !cell.canWalkRight(),
-                            'cell__wall-down': !cell.canWalkDown(),
-                            'cell__wall-left': !cell.canWalkLeft(),
+                            'maze--cell': true,
+                            'maze--cell__wall-up': !cell.canWalkUp(),
+                            'maze--cell__wall-right': !cell.canWalkRight(),
+                            'maze--cell__wall-down': !cell.canWalkDown(),
+                            'maze--cell__wall-left': !cell.canWalkLeft(),
                         })}>
-                            &nbsp;
                         </td>)
                     }
-                </tr>)
+                </div>)
             }
-        </table>;
+        </div>;
     }
 }

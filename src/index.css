@@ -11,3 +11,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/********* MAZE **********/
+
+.maze--table {
+  background: white;
+}
+
+.maze--cell {
+  border: 0;
+  height: 10px;
+  width: 10px;
+}
+
+.maze--cell__wall-up {
+  border-top: 1px solid black;
+}
+
+.maze--cell__wall-right {
+  border-right: 1px solid black;
+}
+
+.maze--cell__wall-down {
+  border-bottom: 1px solid black;
+}
+
+.maze--cell__wall-left {
+  border-left: 1px solid black;
+}
