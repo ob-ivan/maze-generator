@@ -19,14 +19,10 @@ interface Neighbour {
     ny: number,
 }
 
-function removeWall2(cells: Cell[][], x: number, y: number, neighbour: Neighbour) {
+function removeWall(cells: Cell[][], x: number, y: number, neighbour: Neighbour) {
     let direction = neighbour.d;
     let cellCurrent = cells[y][x];
     let cellNeighbour = cells[neighbour.ny][neighbour.nx];
-    removeWall(direction, cellCurrent, cellNeighbour);
-}
-
-function removeWall(direction: Direction, cellCurrent: Cell, cellNeighbour: Cell) {
     switch (direction) {
         case "up":
             cellCurrent.removeWallUp();
@@ -63,7 +59,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             let x = Math.floor(Math.random() * this.props.maxX);
             let y = Math.floor(Math.random() * this.props.maxY);
             let neighbour = this.getRandomNeighbour(x, y);
-            removeWall2(cells, x, y, neighbour);
+            removeWall(cells, x, y, neighbour);
         }
 
         this.state = {
