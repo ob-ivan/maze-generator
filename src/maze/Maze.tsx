@@ -13,6 +13,12 @@ interface MazeState {
 
 type Direction = 'up' | 'right' | 'down' | 'left';
 
+interface Neighbour {
+    d: Direction,
+    nx: number,
+    ny: number,
+}
+
 function removeWall(direction: Direction, cellCurrent: Cell, cellNeighbour: Cell) {
     switch (direction) {
         case "up":
@@ -33,7 +39,6 @@ function removeWall(direction: Direction, cellCurrent: Cell, cellNeighbour: Cell
             break;
     }
 }
-
 
 export class Maze extends React.Component<MazeProps, MazeState> {
     constructor(props: MazeProps) {
@@ -62,14 +67,14 @@ export class Maze extends React.Component<MazeProps, MazeState> {
         };
     }
 
-    private getRandomNeighbour(x: number, y: number) {
+    private getRandomNeighbour(x: number, y: number): Neighbour {
         let moves: { d: Direction, dx: number, dy: number }[] = [
             {d: 'up', dx: 0, dy: -1},
             {d: 'right', dx: 1, dy: 0},
             {d: 'down', dx: 0, dy: 1},
             {d: 'left', dx: -1, dy: 0},
         ];
-        let neighbours: { d: Direction, nx: number, ny: number }[] = [];
+        let neighbours: Neighbour[] = [];
         moves.forEach(({d, dx, dy}) => {
             let nx = x + dx;
             let ny = y + dy;
