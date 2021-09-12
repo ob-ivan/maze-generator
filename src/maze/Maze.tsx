@@ -43,23 +43,40 @@ function removeWall(cells: Cell[][], x: number, y: number, neighbour: Neighbour)
     }
 }
 
+function getRandomItem<T>(array: T[]): T {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
 export class Maze extends React.Component<MazeProps, MazeState> {
     constructor(props: MazeProps) {
         super(props);
         let cells: Cell[][] = [];
+        let snakeCurrent: boolean[][] = [];
 
         for (let y = 0; y < this.props.maxY; ++y) {
             cells[y] = [];
+            snakeCurrent[y] = [];
             for (let x = 0; x < this.props.maxX; ++x) {
                 cells[y][x] = new Cell();
+                snakeCurrent[y][x] = false;
             }
         }
 
-        for (let i = 0, maxI = 1.4 * this.props.maxX * this.props.maxY; i < maxI; ++i) {
+        for (let i = 0, maxI = this.props.maxX + this.props.maxY; i < maxI; ++i) {
             let x = Math.floor(Math.random() * this.props.maxX);
             let y = Math.floor(Math.random() * this.props.maxY);
-            let neighbour = this.getRandomNeighbour(x, y);
-            removeWall(cells, x, y, neighbour);
+            while (true) {
+                let neighbours = this.getNeighboursInBounds(x, y);
+                let neighboursExcludeSnakeCurrent = neighbours.filter((neighbour: Neighbour) => !snakeCurrent[neighbour.ny][neighbour.nx]);
+                if (!neighboursExcludeSnakeCurrent.length) {
+                    break;
+                }
+                let neighbour = getRandomItem(neighboursExcludeSnakeCurrent);
+                snakeCurrent[neighbour.ny][neighbour.nx] = true;
+                removeWall(cells, x, y, neighbour);
+                x = neighbour.nx;
+                y = neighbour.ny;
+            }
         }
 
         this.state = {
@@ -69,7 +86,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
 
     private getRandomNeighbour(x: number, y: number): Neighbour {
         let neighbours = this.getNeighboursInBounds(x, y);
-        return neighbours[Math.floor(Math.random() * neighbours.length)];
+        return getRandomItem(neighbours);
     }
 
     private getNeighboursInBounds(x: number, y: number) {
