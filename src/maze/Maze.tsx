@@ -1,5 +1,6 @@
 import {Cell} from "./Cell";
 import React from "react";
+import classNames from "classnames";
 
 interface MazeProps {
     maxX: number;
@@ -32,8 +33,14 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             {this.state.cells.map((cellRow: Cell[]) =>
                 <tr>
                     {cellRow.map((cell: Cell) =>
-                        <td>
-                            {cell.canWalkUp()}
+                        <td className={classNames({
+                            'cell': true,
+                            'cell__wall-up': !cell.canWalkUp(),
+                            'cell__wall-right': !cell.canWalkRight(),
+                            'cell__wall-down': !cell.canWalkDown(),
+                            'cell__wall-left': !cell.canWalkLeft(),
+                        })}>
+                            &nbsp;
                         </td>)
                     }
                 </tr>)
