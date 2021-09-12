@@ -25,7 +25,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             }
         }
 
-        for (let i = 0, maxI = this.props.maxX * this.props.maxY; i < maxI; ++i) {
+        for (let i = 0, maxI = 1.4 * this.props.maxX * this.props.maxY; i < maxI; ++i) {
             let x = Math.floor(Math.random() * this.props.maxX);
             let y = Math.floor(Math.random() * this.props.maxY);
             let moves: { d: Direction, dx: number, dy: number }[] = [
