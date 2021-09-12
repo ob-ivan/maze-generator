@@ -29,29 +29,40 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             let x = Math.floor(Math.random() * this.props.maxX);
             let y = Math.floor(Math.random() * this.props.maxY);
             let directions: { d: Direction, dx: number, dy: number }[] = [
-                {d: 'up', dx: -1, dy: 0},
-                {d: 'right', dx: 0, dy: 1},
-                {d: 'down', dx: 1, dy: 0},
-                {d: 'left', dx: 0, dy: -1},
+                {d: 'up', dx: 0, dy: -1},
+                {d: 'right', dx: 1, dy: 0},
+                {d: 'down', dx: 0, dy: 1},
+                {d: 'left', dx: -1, dy: 0},
             ];
-            let neighbours: { d: Direction, c: Cell }[] = [];
-            directions.forEach(({ d, dx, dy }) => {
+            let neighbours: { d: Direction, nx: number, ny: number }[] = [];
+            directions.forEach(({d, dx, dy}) => {
                 let nx = x + dx;
                 let ny = y + dy;
                 if (
                     (0 <= nx) && (nx < this.props.maxX) &&
                     (0 <= ny) && (ny < this.props.maxY)
                 ) {
-                    neighbours.push({ d, c: cells[ny][nx]});
+                    neighbours.push({d, ny, nx});
                 }
             });
             let neighbour = neighbours[Math.floor(Math.random() * neighbours.length)];
-            let cell = cells[y][x];
             switch (neighbour.d) {
-                case "up": cell.removeWallUp(); neighbour.c.removeWallDown(); break;
-                case "right": cell.removeWallRight(); neighbour.c.removeWallLeft(); break;
-                case "down": cell.removeWallDown(); neighbour.c.removeWallUp(); break;
-                case "left": cell.removeWallLeft(); neighbour.c.removeWallRight(); break;
+                case "up":
+                    cells[y][x].removeWallUp();
+                    cells[neighbour.ny][neighbour.nx].removeWallDown();
+                    break;
+                case "right":
+                    cells[y][x].removeWallRight();
+                    cells[neighbour.ny][neighbour.nx].removeWallLeft();
+                    break;
+                case "down":
+                    cells[y][x].removeWallDown();
+                    cells[neighbour.ny][neighbour.nx].removeWallUp();
+                    break;
+                case "left":
+                    cells[y][x].removeWallLeft();
+                    cells[neighbour.ny][neighbour.nx].removeWallRight();
+                    break;
             }
         }
 
