@@ -65,7 +65,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             }
         }
 
-        for (let i = 0, maxI = 4; i < maxI; ++i) {
+        while (true) {
             let cellsNotVisited: { x: number, y: number }[] = [];
             for (let y = 0; y < this.props.maxY; ++y) {
                 for (let x = 0; x < this.props.maxX; ++x) {
