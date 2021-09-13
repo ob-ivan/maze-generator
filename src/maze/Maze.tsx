@@ -76,6 +76,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
                 }
                 let neighbour = getRandomItem(neighboursExcludeSnake);
                 snake[neighbour.ny][neighbour.nx] = true;
+                visited[neighbour.ny][neighbour.nx] = true;
                 removeWall(cells, sx, sy, neighbour);
                 sx = neighbour.nx;
                 sy = neighbour.ny;
