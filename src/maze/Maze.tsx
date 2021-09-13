@@ -148,7 +148,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
                             'maze--cell__wall-down': !cell.canWalkDown(),
                             'maze--cell__wall-left': !cell.canWalkLeft(),
                         })}>
-                            {x % 5 === 0 && y % 5 === 0 ? `${x}, ${y}`: ''}
+                            {x % 5 === 0 && y % 5 === 0 ? `${x}, ${y}` : ''}
                         </div>
                     )}
                 </div>
