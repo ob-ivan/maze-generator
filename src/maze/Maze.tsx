@@ -65,7 +65,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             }
         }
 
-        while (true) {
+        for (let i = 0, maxI = 4; i < maxI; ++i) {
             let cellsNotVisited: { x: number, y: number }[] = [];
             for (let y = 0; y < this.props.maxY; ++y) {
                 for (let x = 0; x < this.props.maxX; ++x) {
@@ -91,6 +91,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
 
                 visited[sy][sx] = true;
                 visited[neighbour.ny][neighbour.nx] = true;
+                snake[sy][sx] = true;
                 snake[neighbour.ny][neighbour.nx] = true;
                 removeWall(cells, sx, sy, neighbour);
 
