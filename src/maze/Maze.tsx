@@ -146,6 +146,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
                     {cellRow.map((cell: Cell, x: number) =>
                         <div key={`${x}-${y}`} className={classNames({
                             'maze--cell': true,
+                            'maze--cell__block': !cell.canWalkUp() && !cell.canWalkRight() && !cell.canWalkDown() && !cell.canWalkLeft(),
                             'maze--cell__wall-up': !cell.canWalkUp(),
                             'maze--cell__wall-right': !cell.canWalkRight(),
                             'maze--cell__wall-down': !cell.canWalkDown(),

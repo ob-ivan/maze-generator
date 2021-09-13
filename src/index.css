@@ -28,6 +28,10 @@ code {
   width: 20px;
 }
 
+.maze--cell__block {
+  background: grey;
+}
+
 .maze--cell__wall-up {
   border-top: 1px solid black;
 }
