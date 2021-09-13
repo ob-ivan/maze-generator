@@ -80,7 +80,6 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             let cellNotVisited = getRandomItem(cellsNotVisited);
             let sx = cellNotVisited.x;
             let sy = cellNotVisited.y;
-            visited[sy][sx] = true;
             while (true) {
                 let neighbours = this.getNeighboursInBounds(sx, sy);
                 let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
@@ -88,11 +87,24 @@ export class Maze extends React.Component<MazeProps, MazeState> {
                     break;
                 }
                 let neighbour = getRandomItem(neighboursExcludeSnake);
-                snake[neighbour.ny][neighbour.nx] = true;
+                let visitedNeighbour = visited[neighbour.ny][neighbour.nx];
+
+                visited[sy][sx] = true;
                 visited[neighbour.ny][neighbour.nx] = true;
+                snake[neighbour.ny][neighbour.nx] = true;
                 removeWall(cells, sx, sy, neighbour);
+
+                if (visitedNeighbour) {
+                    break;
+                }
+
                 sx = neighbour.nx;
                 sy = neighbour.ny;
+            }
+            for (let y = 0; y < this.props.maxY; ++y) {
+                for (let x = 0; x < this.props.maxX; ++x) {
+                    snake[y][x] = false;
+                }
             }
         }
 
