@@ -43,33 +43,75 @@ function removeWall(cells: Cell[][], x: number, y: number, neighbour: Neighbour)
     }
 }
 
+function getRandomItem<T>(array: T[]): T {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
 export class Maze extends React.Component<MazeProps, MazeState> {
     constructor(props: MazeProps) {
         super(props);
         let cells: Cell[][] = [];
+        let snake: boolean[][] = [];
+        let visited: boolean[][] = [];
 
         for (let y = 0; y < this.props.maxY; ++y) {
             cells[y] = [];
+            snake[y] = [];
+            visited[y] = [];
             for (let x = 0; x < this.props.maxX; ++x) {
                 cells[y][x] = new Cell();
+                snake[y][x] = false;
+                visited[y][x] = false;
             }
         }
 
-        for (let i = 0, maxI = 1.4 * this.props.maxX * this.props.maxY; i < maxI; ++i) {
-            let x = Math.floor(Math.random() * this.props.maxX);
-            let y = Math.floor(Math.random() * this.props.maxY);
-            let neighbour = this.getRandomNeighbour(x, y);
-            removeWall(cells, x, y, neighbour);
+        while (true) {
+            let cellsNotVisited: { x: number, y: number }[] = [];
+            for (let y = 0; y < this.props.maxY; ++y) {
+                for (let x = 0; x < this.props.maxX; ++x) {
+                    if (!visited[y][x]) {
+                        cellsNotVisited.push({ x, y });
+                    }
+                }
+            }
+            if (!cellsNotVisited.length) {
+                break;
+            }
+            let cellNotVisited = getRandomItem(cellsNotVisited);
+            let sx = cellNotVisited.x;
+            let sy = cellNotVisited.y;
+            while (true) {
+                let neighbours = this.getNeighboursInBounds(sx, sy);
+                let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
+                if (!neighboursExcludeSnake.length) {
+                    break;
+                }
+                let neighbour = getRandomItem(neighboursExcludeSnake);
+                let visitedNeighbour = visited[neighbour.ny][neighbour.nx];
+
+                visited[sy][sx] = true;
+                visited[neighbour.ny][neighbour.nx] = true;
+                snake[sy][sx] = true;
+                snake[neighbour.ny][neighbour.nx] = true;
+                removeWall(cells, sx, sy, neighbour);
+
+                if (visitedNeighbour) {
+                    break;
+                }
+
+                sx = neighbour.nx;
+                sy = neighbour.ny;
+            }
+            for (let y = 0; y < this.props.maxY; ++y) {
+                for (let x = 0; x < this.props.maxX; ++x) {
+                    snake[y][x] = false;
+                }
+            }
         }
 
         this.state = {
             cells
         };
-    }
-
-    private getRandomNeighbour(x: number, y: number): Neighbour {
-        let neighbours = this.getNeighboursInBounds(x, y);
-        return neighbours[Math.floor(Math.random() * neighbours.length)];
     }
 
     private getNeighboursInBounds(x: number, y: number) {
@@ -100,6 +142,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
                     {cellRow.map((cell: Cell, x: number) =>
                         <div key={`${x}-${y}`} className={classNames({
                             'maze--cell': true,
+                            'maze--cell__block': !cell.canWalkUp() && !cell.canWalkRight() && !cell.canWalkDown() && !cell.canWalkLeft(),
                             'maze--cell__wall-up': !cell.canWalkUp(),
                             'maze--cell__wall-right': !cell.canWalkRight(),
                             'maze--cell__wall-down': !cell.canWalkDown(),
