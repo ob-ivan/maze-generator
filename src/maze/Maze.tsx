@@ -51,31 +51,34 @@ export class Maze extends React.Component<MazeProps, MazeState> {
     constructor(props: MazeProps) {
         super(props);
         let cells: Cell[][] = [];
-        let snakeCurrent: boolean[][] = [];
+        let snake: boolean[][] = [];
+        let visited: boolean[][] = [];
 
         for (let y = 0; y < this.props.maxY; ++y) {
             cells[y] = [];
-            snakeCurrent[y] = [];
+            snake[y] = [];
+            visited[y] = [];
             for (let x = 0; x < this.props.maxX; ++x) {
                 cells[y][x] = new Cell();
-                snakeCurrent[y][x] = false;
+                snake[y][x] = false;
+                visited[y][x] = false;
             }
         }
 
         for (let i = 0, maxI = 3 * (this.props.maxX + this.props.maxY); i < maxI; ++i) {
-            let x = Math.floor(Math.random() * this.props.maxX);
-            let y = Math.floor(Math.random() * this.props.maxY);
+            let sx = Math.floor(Math.random() * this.props.maxX);
+            let sy = Math.floor(Math.random() * this.props.maxY);
             while (true) {
-                let neighbours = this.getNeighboursInBounds(x, y);
-                let neighboursExcludeSnakeCurrent = neighbours.filter((neighbour: Neighbour) => !snakeCurrent[neighbour.ny][neighbour.nx]);
-                if (!neighboursExcludeSnakeCurrent.length) {
+                let neighbours = this.getNeighboursInBounds(sx, sy);
+                let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
+                if (!neighboursExcludeSnake.length) {
                     break;
                 }
-                let neighbour = getRandomItem(neighboursExcludeSnakeCurrent);
-                snakeCurrent[neighbour.ny][neighbour.nx] = true;
-                removeWall(cells, x, y, neighbour);
-                x = neighbour.nx;
-                y = neighbour.ny;
+                let neighbour = getRandomItem(neighboursExcludeSnake);
+                snake[neighbour.ny][neighbour.nx] = true;
+                removeWall(cells, sx, sy, neighbour);
+                sx = neighbour.nx;
+                sy = neighbour.ny;
             }
         }
 
