@@ -114,11 +114,6 @@ export class Maze extends React.Component<MazeProps, MazeState> {
         };
     }
 
-    private getRandomNeighbour(x: number, y: number): Neighbour {
-        let neighbours = this.getNeighboursInBounds(x, y);
-        return getRandomItem(neighbours);
-    }
-
     private getNeighboursInBounds(x: number, y: number) {
         let moves: { d: Direction, dx: number, dy: number }[] = [
             { d: 'up', dx: 0, dy: -1 },
