@@ -65,9 +65,22 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             }
         }
 
-        for (let i = 0, maxI = 3 * (this.props.maxX + this.props.maxY); i < maxI; ++i) {
-            let sx = Math.floor(Math.random() * this.props.maxX);
-            let sy = Math.floor(Math.random() * this.props.maxY);
+        while (true) {
+            let cellsNotVisited: { x: number, y: number }[] = [];
+            for (let y = 0; y < this.props.maxY; ++y) {
+                for (let x = 0; x < this.props.maxX; ++x) {
+                    if (!visited[y][x]) {
+                        cellsNotVisited.push({ x, y });
+                    }
+                }
+            }
+            if (!cellsNotVisited.length) {
+                break;
+            }
+            let cellNotVisited = getRandomItem(cellsNotVisited);
+            let sx = cellNotVisited.x;
+            let sy = cellNotVisited.y;
+            visited[sy][sx] = true;
             while (true) {
                 let neighbours = this.getNeighboursInBounds(sx, sy);
                 let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
