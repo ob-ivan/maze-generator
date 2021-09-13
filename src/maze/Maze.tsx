@@ -95,20 +95,20 @@ export class Maze extends React.Component<MazeProps, MazeState> {
 
     render() {
         return <div className='maze--table'>
-            {this.state.cells.map((cellRow: Cell[]) =>
-                <div className='maze--row'>
-                    {cellRow.map((cell: Cell) =>
-                        <td className={classNames({
+            {this.state.cells.map((cellRow: Cell[], y: number) =>
+                <div key={y} className='maze--row'>
+                    {cellRow.map((cell: Cell, x: number) =>
+                        <div key={`${x}-${y}`} className={classNames({
                             'maze--cell': true,
                             'maze--cell__wall-up': !cell.canWalkUp(),
                             'maze--cell__wall-right': !cell.canWalkRight(),
                             'maze--cell__wall-down': !cell.canWalkDown(),
                             'maze--cell__wall-left': !cell.canWalkLeft(),
                         })}>
-                        </td>)
-                    }
-                </div>)
-            }
+                        </div>
+                    )}
+                </div>
+            )}
         </div>;
     }
 }
