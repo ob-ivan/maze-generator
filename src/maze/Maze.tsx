@@ -36,10 +36,10 @@ class Table<V> {
     }
 }
 
-function removeWall(cells: Cell[][], x: number, y: number, neighbour: Neighbour) {
+function removeWall(cells: Table<Cell>, x: number, y: number, neighbour: Neighbour) {
     let direction = neighbour.d;
-    let cellCurrent = cells[y][x];
-    let cellNeighbour = cells[neighbour.ny][neighbour.nx];
+    let cellCurrent = cells.get({ x, y });
+    let cellNeighbour = cells.get({ x: neighbour.nx, y: neighbour.ny });
     switch (direction) {
         case "up":
             cellCurrent.removeWallUp();
@@ -70,22 +70,20 @@ interface MazeProps {
 }
 
 interface MazeState {
-    cells: Cell[][];
+    cells: Table<Cell>;
 }
 
 export class Maze extends React.Component<MazeProps, MazeState> {
     constructor(props: MazeProps) {
         super(props);
-        let cells: Cell[][] = [];
+        let cells: Table<Cell> = new Table(this.props.maxX, this.props.maxY, () => new Cell());
         let snake: boolean[][] = [];
         let visited: boolean[][] = [];
 
         for (let y = 0; y < this.props.maxY; ++y) {
-            cells[y] = [];
             snake[y] = [];
             visited[y] = [];
             for (let x = 0; x < this.props.maxX; ++x) {
-                cells[y][x] = new Cell();
                 snake[y][x] = false;
                 visited[y][x] = false;
             }
@@ -163,7 +161,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
 
     render() {
         return <div className='maze--table'>
-            {this.state.cells.map((cellRow: Cell[], y: number) =>
+            {this.state.cells.mapRow((cellRow: Cell[], y: number) =>
                 <div key={y} className='maze--row'>
                     {cellRow.map((cell: Cell, x: number) =>
                         <div key={`${x}-${y}`} className={classNames({
