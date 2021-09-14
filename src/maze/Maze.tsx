@@ -77,14 +77,12 @@ export class Maze extends React.Component<MazeProps, MazeState> {
     constructor(props: MazeProps) {
         super(props);
         let cells: Table<Cell> = new Table(this.props.maxX, this.props.maxY, () => new Cell());
-        let snake: boolean[][] = [];
+        let snake: Table<boolean> = new Table(this.props.maxX, this.props.maxY, () => false);
         let visited: boolean[][] = [];
 
         for (let y = 0; y < this.props.maxY; ++y) {
-            snake[y] = [];
             visited[y] = [];
             for (let x = 0; x < this.props.maxX; ++x) {
-                snake[y][x] = false;
                 visited[y][x] = false;
             }
         }
@@ -106,7 +104,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             let sy = cellNotVisited.y;
             while (true) {
                 let neighbours = this.getNeighboursInBounds(sx, sy);
-                let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
+                let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake.get({ x: neighbour.nx, y: neighbour.ny }));
                 if (!neighboursExcludeSnake.length) {
                     break;
                 }
@@ -115,8 +113,8 @@ export class Maze extends React.Component<MazeProps, MazeState> {
 
                 visited[sy][sx] = true;
                 visited[neighbour.ny][neighbour.nx] = true;
-                snake[sy][sx] = true;
-                snake[neighbour.ny][neighbour.nx] = true;
+                snake.set({ x: sx, y: sy }, true);
+                snake.set({ x: neighbour.nx, y: neighbour.ny }, true);
                 removeWall(cells, sx, sy, neighbour);
 
                 if (visitedNeighbour) {
@@ -126,11 +124,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
                 sx = neighbour.nx;
                 sy = neighbour.ny;
             }
-            for (let y = 0; y < this.props.maxY; ++y) {
-                for (let x = 0; x < this.props.maxX; ++x) {
-                    snake[y][x] = false;
-                }
-            }
+            snake = new Table(this.props.maxX, this.props.maxY, () => false);
         }
 
         this.state = {
