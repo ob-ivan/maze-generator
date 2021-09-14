@@ -9,10 +9,8 @@ interface Point {
     y: number;
 }
 
-interface Neighbour {
-    d: Direction,
-    nx: number,
-    ny: number,
+interface Neighbour extends Point {
+    d: Direction
 }
 
 class Table<V> {
@@ -39,7 +37,7 @@ class Table<V> {
 function removeWall(cells: Table<Cell>, x: number, y: number, neighbour: Neighbour) {
     let direction = neighbour.d;
     let cellCurrent = cells.get({ x, y });
-    let cellNeighbour = cells.get({ x: neighbour.nx, y: neighbour.ny });
+    let cellNeighbour = cells.get(neighbour);
     switch (direction) {
         case "up":
             cellCurrent.removeWallUp();
@@ -97,25 +95,25 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             let sy = cellNotVisited.y;
             while (true) {
                 let neighbours = this.getNeighboursInBounds(sx, sy);
-                let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake.get({ x: neighbour.nx, y: neighbour.ny }));
+                let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake.get(neighbour));
                 if (!neighboursExcludeSnake.length) {
                     break;
                 }
                 let neighbour = getRandomItem(neighboursExcludeSnake);
-                let visitedNeighbour = visited.get({ x: neighbour.nx, y: neighbour.ny });
+                let visitedNeighbour = visited.get(neighbour);
 
                 visited.set({ x: sx, y: sy }, true);
-                visited.set({ x: neighbour.nx, y: neighbour.ny }, true);
+                visited.set(neighbour, true);
                 snake.set({ x: sx, y: sy }, true);
-                snake.set({ x: neighbour.nx, y: neighbour.ny }, true);
+                snake.set(neighbour, true);
                 removeWall(cells, sx, sy, neighbour);
 
                 if (visitedNeighbour) {
                     break;
                 }
 
-                sx = neighbour.nx;
-                sy = neighbour.ny;
+                sx = neighbour.x;
+                sy = neighbour.y;
             }
             snake = new Table(this.props.maxX, this.props.maxY, () => false);
         }
@@ -140,7 +138,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
                 (0 <= nx) && (nx < this.props.maxX) &&
                 (0 <= ny) && (ny < this.props.maxY)
             ) {
-                neighbours.push({ d, ny, nx });
+                neighbours.push({ d, x: nx, y: ny });
             }
         });
         return neighbours;
