@@ -15,6 +15,24 @@ interface Neighbour {
     ny: number,
 }
 
+class Table<V> {
+    private item: V[][] = [];
+    constructor(private maxX: number, private maxY: number, init: () => V) {
+        for (let y = 0; y < this.maxY; ++y) {
+            this.item[y] = [];
+            for (let x = 0; x < this.maxX; ++x) {
+                this.item[y][x] = init();
+            }
+        }
+    }
+    get({ x, y }: Point) {
+        return this.item[y][x];
+    }
+    set({ x, y }: Point, v: V) {
+        this.item[y][x] = v;
+    }
+}
+
 function removeWall(cells: Cell[][], x: number, y: number, neighbour: Neighbour) {
     let direction = neighbour.d;
     let cellCurrent = cells[y][x];
