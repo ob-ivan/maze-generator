@@ -4,6 +4,11 @@ import classNames from "classnames";
 
 type Direction = 'up' | 'right' | 'down' | 'left';
 
+interface Point {
+    x: number;
+    y: number;
+}
+
 interface Neighbour {
     d: Direction,
     nx: number,
@@ -66,7 +71,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
         }
 
         while (true) {
-            let cellsNotVisited: { x: number, y: number }[] = [];
+            let cellsNotVisited: Point[] = [];
             for (let y = 0; y < this.props.maxY; ++y) {
                 for (let x = 0; x < this.props.maxX; ++x) {
                     if (!visited[y][x]) {
