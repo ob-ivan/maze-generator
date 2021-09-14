@@ -31,6 +31,9 @@ class Table<V> {
     set({ x, y }: Point, v: V) {
         this.item[y][x] = v;
     }
+    mapRow<R>(callback: (row: V[], y: number) => R): R[] {
+        return this.item.map(callback);
+    }
 }
 
 function removeWall(cells: Cell[][], x: number, y: number, neighbour: Neighbour) {
