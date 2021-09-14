@@ -78,20 +78,13 @@ export class Maze extends React.Component<MazeProps, MazeState> {
         super(props);
         let cells: Table<Cell> = new Table(this.props.maxX, this.props.maxY, () => new Cell());
         let snake: Table<boolean> = new Table(this.props.maxX, this.props.maxY, () => false);
-        let visited: boolean[][] = [];
-
-        for (let y = 0; y < this.props.maxY; ++y) {
-            visited[y] = [];
-            for (let x = 0; x < this.props.maxX; ++x) {
-                visited[y][x] = false;
-            }
-        }
+        let visited: Table<boolean> = new Table(this.props.maxX, this.props.maxY, () => false);
 
         while (true) {
             let cellsNotVisited: Point[] = [];
             for (let y = 0; y < this.props.maxY; ++y) {
                 for (let x = 0; x < this.props.maxX; ++x) {
-                    if (!visited[y][x]) {
+                    if (!visited.get({ x, y })) {
                         cellsNotVisited.push({ x, y });
                     }
                 }
@@ -109,10 +102,10 @@ export class Maze extends React.Component<MazeProps, MazeState> {
                     break;
                 }
                 let neighbour = getRandomItem(neighboursExcludeSnake);
-                let visitedNeighbour = visited[neighbour.ny][neighbour.nx];
+                let visitedNeighbour = visited.get({ x: neighbour.nx, y: neighbour.ny });
 
-                visited[sy][sx] = true;
-                visited[neighbour.ny][neighbour.nx] = true;
+                visited.set({ x: sx, y: sy }, true);
+                visited.set({ x: neighbour.nx, y: neighbour.ny }, true);
                 snake.set({ x: sx, y: sy }, true);
                 snake.set({ x: neighbour.nx, y: neighbour.ny }, true);
                 removeWall(cells, sx, sy, neighbour);
