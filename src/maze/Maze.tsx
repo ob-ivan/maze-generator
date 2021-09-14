@@ -2,15 +2,6 @@ import {Cell} from "./Cell";
 import React from "react";
 import classNames from "classnames";
 
-interface MazeProps {
-    maxX: number;
-    maxY: number;
-}
-
-interface MazeState {
-    cells: Cell[][];
-}
-
 type Direction = 'up' | 'right' | 'down' | 'left';
 
 interface Neighbour {
@@ -45,6 +36,15 @@ function removeWall(cells: Cell[][], x: number, y: number, neighbour: Neighbour)
 
 function getRandomItem<T>(array: T[]): T {
     return array[Math.floor(Math.random() * array.length)];
+}
+
+interface MazeProps {
+    maxX: number;
+    maxY: number;
+}
+
+interface MazeState {
+    cells: Cell[][];
 }
 
 export class Maze extends React.Component<MazeProps, MazeState> {
