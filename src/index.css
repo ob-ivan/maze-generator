@@ -23,6 +23,7 @@ code {
 }
 
 .maze--cell {
+    font-size: calc(var(--cell-size) / 2);
     height: var(--cell-size);
     margin: calc(0px - var(--border-width));
     width: var(--cell-size);

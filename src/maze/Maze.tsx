@@ -157,13 +157,21 @@ function generateLevel(maxX: number, maxY: number): Level {
         }
     }
 
-    return { cells, maxX, maxY, items: [] };
+    const visitedPoints = visited.flatMap((row, y) => row.flatMap((visited, x) => (visited ? [{ x, y }] : [])));
+    const items: Item[] = [];
+
+    for (let i = 2; i > 0; --i) {
+        const itemPoint = getRandomItem(visitedPoints);
+        items.push({ ...itemPoint, face: getRandomItem(['🍰', '🍌', '🍗']) });
+    }
+
+    return { cells, maxX, maxY, items };
 }
 
 export const Maze: React.FC<MazeProps> = ({ maxX, maxY }) => {
     const [level] = useState<Level>(generateLevel(maxX, maxY));
 
-    const { cells } = level;
+    const { cells, items } = level;
 
     return (
         <div className="maze--table">
@@ -184,7 +192,9 @@ export const Maze: React.FC<MazeProps> = ({ maxX, maxY }) => {
                                 'maze--cell__wall-down': !cell.canWalkDown(),
                                 'maze--cell__wall-left': !cell.canWalkLeft(),
                             })}
-                        ></div>
+                        >
+                            {items.find(item => item.x === x && item.y === y)?.face}
+                        </div>
                     ))}
                 </div>
             ))}
