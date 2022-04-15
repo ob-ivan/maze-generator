@@ -7,6 +7,17 @@ interface Point {
     y: number;
 }
 
+interface Item extends Point {
+    face: string;
+}
+
+interface Level {
+    cells: Cell[][];
+    maxX: number;
+    maxY: number;
+    items: Item[];
+}
+
 interface MazeProps {
     maxX: number;
     maxY: number;
@@ -66,7 +77,7 @@ function getNeighboursInBounds(x: number, y: number, maxX: number, maxY: number)
     return neighbours;
 }
 
-function generateCells(maxX: number, maxY: number): Cell[][] {
+function generateLevel(maxX: number, maxY: number): Level {
     const cells: Cell[][] = [];
     const snake: boolean[][] = [];
     const visited: boolean[][] = [];
@@ -146,11 +157,13 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
         }
     }
 
-    return cells;
+    return { cells, maxX, maxY, items: [] };
 }
 
 export const Maze: React.FC<MazeProps> = ({ maxX, maxY }) => {
-    const [cells] = useState<Cell[][]>(generateCells(maxX, maxY));
+    const [level] = useState<Level>(generateLevel(maxX, maxY));
+
+    const { cells } = level;
 
     return (
         <div className="maze--table">
