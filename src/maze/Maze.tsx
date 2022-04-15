@@ -1,6 +1,6 @@
-import {Cell} from "./Cell";
-import React from "react";
-import classNames from "classnames";
+import { Cell } from './Cell';
+import React from 'react';
+import classNames from 'classnames';
 
 interface MazeProps {
     maxX: number;
@@ -10,9 +10,9 @@ interface MazeProps {
 type Direction = 'up' | 'right' | 'down' | 'left';
 
 interface Neighbour {
-    d: Direction,
-    nx: number,
-    ny: number,
+    d: Direction;
+    nx: number;
+    ny: number;
 }
 
 function removeWall(cells: Cell[][], x: number, y: number, neighbour: Neighbour) {
@@ -20,19 +20,19 @@ function removeWall(cells: Cell[][], x: number, y: number, neighbour: Neighbour)
     const cellCurrent = cells[y][x];
     const cellNeighbour = cells[neighbour.ny][neighbour.nx];
     switch (direction) {
-        case "up":
+        case 'up':
             cellCurrent.removeWallUp();
             cellNeighbour.removeWallDown();
             break;
-        case "right":
+        case 'right':
             cellCurrent.removeWallRight();
             cellNeighbour.removeWallLeft();
             break;
-        case "down":
+        case 'down':
             cellCurrent.removeWallDown();
             cellNeighbour.removeWallUp();
             break;
-        case "left":
+        case 'left':
             cellCurrent.removeWallLeft();
             cellNeighbour.removeWallRight();
             break;
@@ -44,7 +44,7 @@ function getRandomItem<T>(array: T[]): T {
 }
 
 function getNeighboursInBounds(x: number, y: number, maxX: number, maxY: number) {
-    const moves: { d: Direction, dx: number, dy: number }[] = [
+    const moves: { d: Direction; dx: number; dy: number }[] = [
         { d: 'up', dx: 0, dy: -1 },
         { d: 'right', dx: 1, dy: 0 },
         { d: 'down', dx: 0, dy: 1 },
@@ -54,10 +54,7 @@ function getNeighboursInBounds(x: number, y: number, maxX: number, maxY: number)
     moves.forEach(({ d, dx, dy }) => {
         const nx = x + dx;
         const ny = y + dy;
-        if (
-            (0 <= nx) && (nx < maxX) &&
-            (0 <= ny) && (ny < maxY)
-        ) {
+        if (0 <= nx && nx < maxX && 0 <= ny && ny < maxY) {
             neighbours.push({ d, ny, nx });
         }
     });
@@ -81,7 +78,7 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
     }
 
     while (true) {
-        const cellsNotVisited: { x: number, y: number }[] = [];
+        const cellsNotVisited: { x: number; y: number }[] = [];
         for (let y = 0; y < maxY; ++y) {
             for (let x = 0; x < maxX; ++x) {
                 if (!visited[y][x]) {
@@ -97,7 +94,9 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
         let sy = cellNotVisited.y;
         while (true) {
             const neighbours = getNeighboursInBounds(sx, sy, maxX, maxY);
-            const neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
+            const neighboursExcludeSnake = neighbours.filter(
+                (neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]
+            );
             if (!neighboursExcludeSnake.length) {
                 break;
             }
@@ -127,24 +126,32 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
     return cells;
 }
 
-export const Maze: React.FC<MazeProps> = ({maxX, maxY}) => {
+export const Maze: React.FC<MazeProps> = ({ maxX, maxY }) => {
     const cells = generateCells(maxX, maxY);
 
-    return <div className='maze--table'>
-        {cells.map((cellRow: Cell[], y: number) =>
-            <div key={y} className='maze--row'>
-                {cellRow.map((cell: Cell, x: number) =>
-                    <div key={`${x}-${y}`} className={classNames({
-                        'maze--cell': true,
-                        'maze--cell__block': !cell.canWalkUp() && !cell.canWalkRight() && !cell.canWalkDown() && !cell.canWalkLeft(),
-                        'maze--cell__wall-up': !cell.canWalkUp(),
-                        'maze--cell__wall-right': !cell.canWalkRight(),
-                        'maze--cell__wall-down': !cell.canWalkDown(),
-                        'maze--cell__wall-left': !cell.canWalkLeft(),
-                    })}>
-                    </div>
-                )}
-            </div>
-        )}
-    </div>;
-}
+    return (
+        <div className="maze--table">
+            {cells.map((cellRow: Cell[], y: number) => (
+                <div key={y} className="maze--row">
+                    {cellRow.map((cell: Cell, x: number) => (
+                        <div
+                            key={`${x}-${y}`}
+                            className={classNames({
+                                'maze--cell': true,
+                                'maze--cell__block':
+                                    !cell.canWalkUp() &&
+                                    !cell.canWalkRight() &&
+                                    !cell.canWalkDown() &&
+                                    !cell.canWalkLeft(),
+                                'maze--cell__wall-up': !cell.canWalkUp(),
+                                'maze--cell__wall-right': !cell.canWalkRight(),
+                                'maze--cell__wall-down': !cell.canWalkDown(),
+                                'maze--cell__wall-left': !cell.canWalkLeft(),
+                            })}
+                        ></div>
+                    ))}
+                </div>
+            ))}
+        </div>
+    );
+};
