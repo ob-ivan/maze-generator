@@ -1,5 +1,5 @@
 import { Cell } from './Cell';
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames';
 
 interface MazeProps {
@@ -77,26 +77,44 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
         }
     }
 
-    while (true) {
+    for (let i = maxX + maxY; i > 0; --i) {
         const cellsNotVisited: { x: number; y: number }[] = [];
+        const cellsNotVisitedWithVisitedNeighbour: { x: number; y: number; n: Neighbour }[] = [];
         for (let y = 0; y < maxY; ++y) {
             for (let x = 0; x < maxX; ++x) {
                 if (!visited[y][x]) {
                     cellsNotVisited.push({ x, y });
+
+                    const neighboursInBounds = getNeighboursInBounds(x, y, maxX, maxY);
+                    const neighboursInBoundsFilteredMapped = neighboursInBounds
+                        .filter(({ nx, ny }) => visited[ny][nx])
+                        .map(n => ({
+                            x,
+                            y,
+                            n,
+                        }));
+                    if (neighboursInBoundsFilteredMapped.length > 0) {
+                        cellsNotVisitedWithVisitedNeighbour.push(...neighboursInBoundsFilteredMapped);
+                    }
                 }
             }
         }
         if (!cellsNotVisited.length) {
             break;
         }
-        const cellNotVisited = getRandomItem(cellsNotVisited);
+        let cellNotVisited: { x: number; y: number };
+        if (cellsNotVisitedWithVisitedNeighbour.length > 0) {
+            const { x: sx, y: sy, n: neighbour } = getRandomItem(cellsNotVisitedWithVisitedNeighbour);
+            removeWall(cells, sx, sy, neighbour);
+            cellNotVisited = { x: sx, y: sy };
+        } else {
+            cellNotVisited = getRandomItem(cellsNotVisited);
+        }
         let sx = cellNotVisited.x;
         let sy = cellNotVisited.y;
         while (true) {
             const neighbours = getNeighboursInBounds(sx, sy, maxX, maxY);
-            const neighboursExcludeSnake = neighbours.filter(
-                (neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]
-            );
+            const neighboursExcludeSnake = neighbours.filter(({ nx, ny }) => !snake[ny][nx] && !visited[ny][nx]);
             if (!neighboursExcludeSnake.length) {
                 break;
             }
@@ -127,7 +145,7 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
 }
 
 export const Maze: React.FC<MazeProps> = ({ maxX, maxY }) => {
-    const cells = generateCells(maxX, maxY);
+    const [cells] = useState<Cell[][]>(generateCells(maxX, maxY));
 
     return (
         <div className="maze--table">
