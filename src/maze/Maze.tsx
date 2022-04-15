@@ -81,7 +81,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             let sx = cellNotVisited.x;
             let sy = cellNotVisited.y;
             while (true) {
-                let neighbours = this.getNeighboursInBounds(sx, sy);
+                let neighbours = this.getNeighboursInBounds(sx, sy, this.props.maxX, this.props.maxY);
                 let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
                 if (!neighboursExcludeSnake.length) {
                     break;
@@ -114,7 +114,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
         };
     }
 
-    private getNeighboursInBounds(x: number, y: number) {
+    private getNeighboursInBounds(x: number, y: number, maxX: number, maxY: number) {
         let moves: { d: Direction, dx: number, dy: number }[] = [
             { d: 'up', dx: 0, dy: -1 },
             { d: 'right', dx: 1, dy: 0 },
@@ -126,8 +126,8 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             let nx = x + dx;
             let ny = y + dy;
             if (
-                (0 <= nx) && (nx < this.props.maxX) &&
-                (0 <= ny) && (ny < this.props.maxY)
+                (0 <= nx) && (nx < maxX) &&
+                (0 <= ny) && (ny < maxY)
             ) {
                 neighbours.push({ d, ny, nx });
             }
