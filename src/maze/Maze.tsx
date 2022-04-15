@@ -7,10 +7,6 @@ interface MazeProps {
     maxY: number;
 }
 
-interface MazeState {
-    cells: Cell[][];
-}
-
 type Direction = 'up' | 'right' | 'down' | 'left';
 
 interface Neighbour {
@@ -131,34 +127,24 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
     return cells;
 }
 
-export class Maze extends React.Component<MazeProps, MazeState> {
-    constructor(props: MazeProps) {
-        super(props);
+export const Maze: React.FC<MazeProps> = ({maxX, maxY}) => {
+    const cells = generateCells(maxX, maxY);
 
-        const cells = generateCells(this.props.maxX, this.props.maxY);
-
-        this.state = {
-            cells
-        };
-    }
-
-    render() {
-        return <div className='maze--table'>
-            {this.state.cells.map((cellRow: Cell[], y: number) =>
-                <div key={y} className='maze--row'>
-                    {cellRow.map((cell: Cell, x: number) =>
-                        <div key={`${x}-${y}`} className={classNames({
-                            'maze--cell': true,
-                            'maze--cell__block': !cell.canWalkUp() && !cell.canWalkRight() && !cell.canWalkDown() && !cell.canWalkLeft(),
-                            'maze--cell__wall-up': !cell.canWalkUp(),
-                            'maze--cell__wall-right': !cell.canWalkRight(),
-                            'maze--cell__wall-down': !cell.canWalkDown(),
-                            'maze--cell__wall-left': !cell.canWalkLeft(),
-                        })}>
-                        </div>
-                    )}
-                </div>
-            )}
-        </div>;
-    }
+    return <div className='maze--table'>
+        {cells.map((cellRow: Cell[], y: number) =>
+            <div key={y} className='maze--row'>
+                {cellRow.map((cell: Cell, x: number) =>
+                    <div key={`${x}-${y}`} className={classNames({
+                        'maze--cell': true,
+                        'maze--cell__block': !cell.canWalkUp() && !cell.canWalkRight() && !cell.canWalkDown() && !cell.canWalkLeft(),
+                        'maze--cell__wall-up': !cell.canWalkUp(),
+                        'maze--cell__wall-right': !cell.canWalkRight(),
+                        'maze--cell__wall-down': !cell.canWalkDown(),
+                        'maze--cell__wall-left': !cell.canWalkLeft(),
+                    })}>
+                    </div>
+                )}
+            </div>
+        )}
+    </div>;
 }
