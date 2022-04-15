@@ -47,6 +47,27 @@ function getRandomItem<T>(array: T[]): T {
     return array[Math.floor(Math.random() * array.length)];
 }
 
+function getNeighboursInBounds(x: number, y: number, maxX: number, maxY: number) {
+    let moves: { d: Direction, dx: number, dy: number }[] = [
+        { d: 'up', dx: 0, dy: -1 },
+        { d: 'right', dx: 1, dy: 0 },
+        { d: 'down', dx: 0, dy: 1 },
+        { d: 'left', dx: -1, dy: 0 },
+    ];
+    let neighbours: Neighbour[] = [];
+    moves.forEach(({ d, dx, dy }) => {
+        let nx = x + dx;
+        let ny = y + dy;
+        if (
+            (0 <= nx) && (nx < maxX) &&
+            (0 <= ny) && (ny < maxY)
+        ) {
+            neighbours.push({ d, ny, nx });
+        }
+    });
+    return neighbours;
+}
+
 export class Maze extends React.Component<MazeProps, MazeState> {
     constructor(props: MazeProps) {
         super(props);
@@ -81,7 +102,7 @@ export class Maze extends React.Component<MazeProps, MazeState> {
             let sx = cellNotVisited.x;
             let sy = cellNotVisited.y;
             while (true) {
-                let neighbours = this.getNeighboursInBounds(sx, sy, this.props.maxX, this.props.maxY);
+                let neighbours = getNeighboursInBounds(sx, sy, this.props.maxX, this.props.maxY);
                 let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
                 if (!neighboursExcludeSnake.length) {
                     break;
@@ -112,27 +133,6 @@ export class Maze extends React.Component<MazeProps, MazeState> {
         this.state = {
             cells
         };
-    }
-
-    private getNeighboursInBounds(x: number, y: number, maxX: number, maxY: number) {
-        let moves: { d: Direction, dx: number, dy: number }[] = [
-            { d: 'up', dx: 0, dy: -1 },
-            { d: 'right', dx: 1, dy: 0 },
-            { d: 'down', dx: 0, dy: 1 },
-            { d: 'left', dx: -1, dy: 0 },
-        ];
-        let neighbours: Neighbour[] = [];
-        moves.forEach(({ d, dx, dy }) => {
-            let nx = x + dx;
-            let ny = y + dy;
-            if (
-                (0 <= nx) && (nx < maxX) &&
-                (0 <= ny) && (ny < maxY)
-            ) {
-                neighbours.push({ d, ny, nx });
-            }
-        });
-        return neighbours;
     }
 
     render() {
