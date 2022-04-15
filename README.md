@@ -2,6 +2,12 @@
 
 This is a simple maze generator.
 
+# Installation
+
+```
+yarn
+```
+
 # Development
 
 In the project directory, you can run:
