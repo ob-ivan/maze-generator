@@ -16,9 +16,9 @@ interface Neighbour {
 }
 
 function removeWall(cells: Cell[][], x: number, y: number, neighbour: Neighbour) {
-    let direction = neighbour.d;
-    let cellCurrent = cells[y][x];
-    let cellNeighbour = cells[neighbour.ny][neighbour.nx];
+    const direction = neighbour.d;
+    const cellCurrent = cells[y][x];
+    const cellNeighbour = cells[neighbour.ny][neighbour.nx];
     switch (direction) {
         case "up":
             cellCurrent.removeWallUp();
@@ -44,16 +44,16 @@ function getRandomItem<T>(array: T[]): T {
 }
 
 function getNeighboursInBounds(x: number, y: number, maxX: number, maxY: number) {
-    let moves: { d: Direction, dx: number, dy: number }[] = [
+    const moves: { d: Direction, dx: number, dy: number }[] = [
         { d: 'up', dx: 0, dy: -1 },
         { d: 'right', dx: 1, dy: 0 },
         { d: 'down', dx: 0, dy: 1 },
         { d: 'left', dx: -1, dy: 0 },
     ];
-    let neighbours: Neighbour[] = [];
+    const neighbours: Neighbour[] = [];
     moves.forEach(({ d, dx, dy }) => {
-        let nx = x + dx;
-        let ny = y + dy;
+        const nx = x + dx;
+        const ny = y + dy;
         if (
             (0 <= nx) && (nx < maxX) &&
             (0 <= ny) && (ny < maxY)
@@ -65,9 +65,9 @@ function getNeighboursInBounds(x: number, y: number, maxX: number, maxY: number)
 }
 
 function generateCells(maxX: number, maxY: number): Cell[][] {
-    let cells: Cell[][] = [];
-    let snake: boolean[][] = [];
-    let visited: boolean[][] = [];
+    const cells: Cell[][] = [];
+    const snake: boolean[][] = [];
+    const visited: boolean[][] = [];
 
     for (let y = 0; y < maxY; ++y) {
         cells[y] = [];
@@ -81,7 +81,7 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
     }
 
     while (true) {
-        let cellsNotVisited: { x: number, y: number }[] = [];
+        const cellsNotVisited: { x: number, y: number }[] = [];
         for (let y = 0; y < maxY; ++y) {
             for (let x = 0; x < maxX; ++x) {
                 if (!visited[y][x]) {
@@ -92,17 +92,17 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
         if (!cellsNotVisited.length) {
             break;
         }
-        let cellNotVisited = getRandomItem(cellsNotVisited);
+        const cellNotVisited = getRandomItem(cellsNotVisited);
         let sx = cellNotVisited.x;
         let sy = cellNotVisited.y;
         while (true) {
-            let neighbours = getNeighboursInBounds(sx, sy, maxX, maxY);
-            let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
+            const neighbours = getNeighboursInBounds(sx, sy, maxX, maxY);
+            const neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
             if (!neighboursExcludeSnake.length) {
                 break;
             }
-            let neighbour = getRandomItem(neighboursExcludeSnake);
-            let visitedNeighbour = visited[neighbour.ny][neighbour.nx];
+            const neighbour = getRandomItem(neighboursExcludeSnake);
+            const visitedNeighbour = visited[neighbour.ny][neighbour.nx];
 
             visited[sy][sx] = true;
             visited[neighbour.ny][neighbour.nx] = true;
