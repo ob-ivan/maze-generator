@@ -2,6 +2,11 @@ import { Cell } from './Cell';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
+interface Point {
+    x: number;
+    y: number;
+}
+
 interface MazeProps {
     maxX: number;
     maxY: number;
@@ -78,7 +83,7 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
     }
 
     for (let i = maxX + maxY; i > 0; --i) {
-        const cellsNotVisited: { x: number; y: number }[] = [];
+        const cellsNotVisited: Point[] = [];
         const cellsNotVisitedWithVisitedNeighbour: { x: number; y: number; n: Neighbour }[] = [];
         for (let y = 0; y < maxY; ++y) {
             for (let x = 0; x < maxX; ++x) {
@@ -102,7 +107,7 @@ function generateCells(maxX: number, maxY: number): Cell[][] {
         if (!cellsNotVisited.length) {
             break;
         }
-        let cellNotVisited: { x: number; y: number };
+        let cellNotVisited: Point;
         if (cellsNotVisitedWithVisitedNeighbour.length > 0) {
             const { x: sx, y: sy, n: neighbour } = getRandomItem(cellsNotVisitedWithVisitedNeighbour);
             removeWall(cells, sx, sy, neighbour);
