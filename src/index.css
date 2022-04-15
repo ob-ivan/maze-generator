@@ -1,49 +1,105 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 /********* MAZE **********/
 
 .maze--table {
-  background: white;
+    background: white;
+    --cell-size: 30px;
+    --border-width: 2px;
 }
 
 .maze--row {
-  display: flex;
+    display: flex;
 }
 
 .maze--cell {
-  border: 1px solid white;
-  height: 20px;
-  width: 20px;
+    height: var(--cell-size);
+    margin: calc(0px - var(--border-width));
+    width: var(--cell-size);
 }
 
 .maze--cell__block {
-  background: grey;
+    background: grey;
 }
 
 .maze--cell__wall-up {
-  border-top: 1px solid black;
+    background: linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0);
 }
 
 .maze--cell__wall-right {
-  border-right: 1px solid black;
+    background: linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0);
 }
 
 .maze--cell__wall-down {
-  border-bottom: 1px solid black;
+    background: linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0);
 }
 
 .maze--cell__wall-left {
-  border-left: 1px solid black;
+    background: linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0);
+}
+
+.maze--cell__wall-up.maze--cell__wall-right {
+    background: linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0);
+}
+
+.maze--cell__wall-right.maze--cell__wall-down {
+    background: linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0);
+}
+
+.maze--cell__wall-down.maze--cell__wall-left {
+    background: linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0);
+}
+
+.maze--cell__wall-left.maze--cell__wall-up {
+    background: linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0);
+}
+
+.maze--cell__wall-up.maze--cell__wall-down {
+    background: linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0);
+}
+
+.maze--cell__wall-right.maze--cell__wall-left {
+    background: linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0);
+}
+
+.maze--cell__wall-up.maze--cell__wall-right.maze--cell__wall-down {
+    background: linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0);
+}
+
+.maze--cell__wall-right.maze--cell__wall-down.maze--cell__wall-left {
+    background: linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0);
+}
+
+.maze--cell__wall-down.maze--cell__wall-left.maze--cell__wall-up {
+    background: linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0);
+}
+
+.maze--cell__wall-left.maze--cell__wall-up.maze--cell__wall-right {
+    background: linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0),
+    linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0);
 }
