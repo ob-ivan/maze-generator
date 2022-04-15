@@ -68,67 +68,74 @@ function getNeighboursInBounds(x: number, y: number, maxX: number, maxY: number)
     return neighbours;
 }
 
+function generateCells(maxX: number, maxY: number): Cell[][] {
+    let cells: Cell[][] = [];
+    let snake: boolean[][] = [];
+    let visited: boolean[][] = [];
+
+    for (let y = 0; y < maxY; ++y) {
+        cells[y] = [];
+        snake[y] = [];
+        visited[y] = [];
+        for (let x = 0; x < maxX; ++x) {
+            cells[y][x] = new Cell();
+            snake[y][x] = false;
+            visited[y][x] = false;
+        }
+    }
+
+    while (true) {
+        let cellsNotVisited: { x: number, y: number }[] = [];
+        for (let y = 0; y < maxY; ++y) {
+            for (let x = 0; x < maxX; ++x) {
+                if (!visited[y][x]) {
+                    cellsNotVisited.push({ x, y });
+                }
+            }
+        }
+        if (!cellsNotVisited.length) {
+            break;
+        }
+        let cellNotVisited = getRandomItem(cellsNotVisited);
+        let sx = cellNotVisited.x;
+        let sy = cellNotVisited.y;
+        while (true) {
+            let neighbours = getNeighboursInBounds(sx, sy, maxX, maxY);
+            let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
+            if (!neighboursExcludeSnake.length) {
+                break;
+            }
+            let neighbour = getRandomItem(neighboursExcludeSnake);
+            let visitedNeighbour = visited[neighbour.ny][neighbour.nx];
+
+            visited[sy][sx] = true;
+            visited[neighbour.ny][neighbour.nx] = true;
+            snake[sy][sx] = true;
+            snake[neighbour.ny][neighbour.nx] = true;
+            removeWall(cells, sx, sy, neighbour);
+
+            if (visitedNeighbour) {
+                break;
+            }
+
+            sx = neighbour.nx;
+            sy = neighbour.ny;
+        }
+        for (let y = 0; y < maxY; ++y) {
+            for (let x = 0; x < maxX; ++x) {
+                snake[y][x] = false;
+            }
+        }
+    }
+
+    return cells;
+}
+
 export class Maze extends React.Component<MazeProps, MazeState> {
     constructor(props: MazeProps) {
         super(props);
-        let cells: Cell[][] = [];
-        let snake: boolean[][] = [];
-        let visited: boolean[][] = [];
 
-        for (let y = 0; y < this.props.maxY; ++y) {
-            cells[y] = [];
-            snake[y] = [];
-            visited[y] = [];
-            for (let x = 0; x < this.props.maxX; ++x) {
-                cells[y][x] = new Cell();
-                snake[y][x] = false;
-                visited[y][x] = false;
-            }
-        }
-
-        while (true) {
-            let cellsNotVisited: { x: number, y: number }[] = [];
-            for (let y = 0; y < this.props.maxY; ++y) {
-                for (let x = 0; x < this.props.maxX; ++x) {
-                    if (!visited[y][x]) {
-                        cellsNotVisited.push({ x, y });
-                    }
-                }
-            }
-            if (!cellsNotVisited.length) {
-                break;
-            }
-            let cellNotVisited = getRandomItem(cellsNotVisited);
-            let sx = cellNotVisited.x;
-            let sy = cellNotVisited.y;
-            while (true) {
-                let neighbours = getNeighboursInBounds(sx, sy, this.props.maxX, this.props.maxY);
-                let neighboursExcludeSnake = neighbours.filter((neighbour: Neighbour) => !snake[neighbour.ny][neighbour.nx]);
-                if (!neighboursExcludeSnake.length) {
-                    break;
-                }
-                let neighbour = getRandomItem(neighboursExcludeSnake);
-                let visitedNeighbour = visited[neighbour.ny][neighbour.nx];
-
-                visited[sy][sx] = true;
-                visited[neighbour.ny][neighbour.nx] = true;
-                snake[sy][sx] = true;
-                snake[neighbour.ny][neighbour.nx] = true;
-                removeWall(cells, sx, sy, neighbour);
-
-                if (visitedNeighbour) {
-                    break;
-                }
-
-                sx = neighbour.nx;
-                sy = neighbour.ny;
-            }
-            for (let y = 0; y < this.props.maxY; ++y) {
-                for (let x = 0; x < this.props.maxX; ++x) {
-                    snake[y][x] = false;
-                }
-            }
-        }
+        const cells = generateCells(this.props.maxX, this.props.maxY);
 
         this.state = {
             cells
