@@ -79,17 +79,14 @@ function getNeighboursInBounds(x: number, y: number, maxX: number, maxY: number)
 
 function generateLevel(maxX: number, maxY: number): Level {
     const cells: Cell[][] = [];
-    const snake: boolean[][] = [];
     const visited: boolean[][] = [];
     const deadEnds: Point[] = [];
 
     for (let y = 0; y < maxY; ++y) {
         cells[y] = [];
-        snake[y] = [];
         visited[y] = [];
         for (let x = 0; x < maxX; ++x) {
             cells[y][x] = new Cell();
-            snake[y][x] = false;
             visited[y][x] = false;
         }
     }
@@ -131,10 +128,9 @@ function generateLevel(maxX: number, maxY: number): Level {
         let sy = cellNotVisited.y;
         while (true) {
             const neighbours = getNeighboursInBounds(sx, sy, maxX, maxY);
-            const neighboursExcludeSnake = neighbours.filter(({ nx, ny }) => !snake[ny][nx] && !visited[ny][nx]);
+            const neighboursExcludeSnake = neighbours.filter(({ nx, ny }) => !visited[ny][nx]);
 
             visited[sy][sx] = true;
-            snake[sy][sx] = true;
 
             if (!neighboursExcludeSnake.length) {
                 deadEnds.push({ x: sx, y: sy });
@@ -144,7 +140,6 @@ function generateLevel(maxX: number, maxY: number): Level {
             const visitedNeighbour = visited[neighbour.ny][neighbour.nx];
 
             visited[neighbour.ny][neighbour.nx] = true;
-            snake[neighbour.ny][neighbour.nx] = true;
             removeWall(cells, sx, sy, neighbour);
 
             if (visitedNeighbour) {
@@ -153,11 +148,6 @@ function generateLevel(maxX: number, maxY: number): Level {
 
             sx = neighbour.nx;
             sy = neighbour.ny;
-        }
-        for (let y = 0; y < maxY; ++y) {
-            for (let x = 0; x < maxX; ++x) {
-                snake[y][x] = false;
-            }
         }
     }
 
