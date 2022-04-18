@@ -1,22 +1,7 @@
 import { Cell } from './Cell';
 import React, { useState } from 'react';
 import classNames from 'classnames';
-
-interface Point {
-    x: number;
-    y: number;
-}
-
-interface Item extends Point {
-    face: string;
-}
-
-interface Level {
-    cells: Cell[][];
-    maxX: number;
-    maxY: number;
-    items: Item[];
-}
+import { Item, Level, Point } from '../types/Level';
 
 interface MazeProps {
     maxX: number;
