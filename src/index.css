@@ -14,8 +14,8 @@ code {
 
 .maze--table {
     background: white;
+    --border-width: 1px;
     --cell-size: 30px;
-    --border-width: 2px;
 }
 
 .maze--row {
@@ -25,7 +25,7 @@ code {
 .maze--cell {
     font-size: calc(var(--cell-size) / 2);
     height: var(--cell-size);
-    margin: calc(0px - var(--border-width));
+    position: relative;
     width: var(--cell-size);
 }
 
@@ -33,76 +33,38 @@ code {
     background: grey;
 }
 
-.maze--cell__wall-up {
-    background: linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-right {
-    background: linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-down {
-    background: linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-left {
-    background: linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-up.maze--cell__wall-right {
-    background: linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-right.maze--cell__wall-down {
-    background: linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-down.maze--cell__wall-left {
-    background: linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-left.maze--cell__wall-up {
-    background: linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-up.maze--cell__wall-down {
-    background: linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-right.maze--cell__wall-left {
-    background: linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-up.maze--cell__wall-right.maze--cell__wall-down {
-    background: linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-right.maze--cell__wall-down.maze--cell__wall-left {
-    background: linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-down.maze--cell__wall-left.maze--cell__wall-up {
-    background: linear-gradient(to top, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-left.maze--cell__wall-up.maze--cell__wall-right {
-    background: linear-gradient(to right, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to bottom, black var(--border-width), rgba(0, 0, 0, 0) 0),
-        linear-gradient(to left, black var(--border-width), rgba(0, 0, 0, 0) 0);
-}
-
-.maze--cell__wall-left.maze--cell__wall-up.maze--cell__wall-right.maze--cell__wall-down {
+.maze--wall-up {
     background: black;
+    height: calc(2 * var(--border-width));
+    left: calc(0px - var(--border-width));
+    position: absolute;
+    top: calc(0px - var(--border-width));
+    width: calc(var(--cell-size) + 2 * var(--border-width));
+}
+
+.maze--wall-right {
+    background: black;
+    height: calc(var(--cell-size) + 2 * var(--border-width));
+    right: calc(0px - var(--border-width));
+    position: absolute;
+    top: calc(0px - var(--border-width));
+    width: calc(2 * var(--border-width));
+}
+
+.maze--wall-down {
+    background: black;
+    bottom: calc(0px - var(--border-width));
+    height: calc(2 * var(--border-width));
+    left: calc(0px - var(--border-width));
+    position: absolute;
+    width: calc(var(--cell-size) + 2 * var(--border-width));
+}
+
+.maze--wall-left {
+    background: black;
+    width: calc(2 * var(--border-width));
+    left: calc(0px - var(--border-width));
+    position: absolute;
+    top: calc(0px - var(--border-width));
+    height: calc(var(--cell-size) + 2 * var(--border-width));
 }
