@@ -1,8 +1,10 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Cell } from '../types/Cell';
-import { Level } from '../types/Level';
+import { Level, Point } from '../types/Level';
 import { generateLevel } from './generateLevel';
+
+const heroFace = '🧚';
 
 interface MazeProps {
     maxX: number;
@@ -11,6 +13,10 @@ interface MazeProps {
 
 export const Maze: React.FC<MazeProps> = ({ maxX, maxY }) => {
     const [level] = useState<Level>(generateLevel(maxX, maxY));
+    const [hero] = useState<Point>({
+        x: Math.floor(Math.random() * maxX),
+        y: Math.floor(Math.random() * maxY),
+    });
 
     const { cells, items } = level;
 
@@ -35,6 +41,7 @@ export const Maze: React.FC<MazeProps> = ({ maxX, maxY }) => {
                             {!cell.canWalkDown() && <div className="maze--wall-down"></div>}
                             {!cell.canWalkLeft() && <div className="maze--wall-left"></div>}
                             {items.find(item => item.x === x && item.y === y)?.face}
+                            {hero.x === x && hero.y === y && heroFace}
                         </div>
                     ))}
                 </div>
