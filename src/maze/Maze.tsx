@@ -1,4 +1,4 @@
-import { Cell } from './Cell';
+import { Cell } from '../types/Cell';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { Item, Level, Point } from '../types/Level';
