@@ -132,6 +132,10 @@ function generateLevel(maxX: number, maxY: number): Level {
         while (true) {
             const neighbours = getNeighboursInBounds(sx, sy, maxX, maxY);
             const neighboursExcludeSnake = neighbours.filter(({ nx, ny }) => !snake[ny][nx] && !visited[ny][nx]);
+
+            visited[sy][sx] = true;
+            snake[sy][sx] = true;
+
             if (!neighboursExcludeSnake.length) {
                 deadEnds.push({ x: sx, y: sy });
                 break;
@@ -139,9 +143,7 @@ function generateLevel(maxX: number, maxY: number): Level {
             const neighbour = getRandomItem(neighboursExcludeSnake);
             const visitedNeighbour = visited[neighbour.ny][neighbour.nx];
 
-            visited[sy][sx] = true;
             visited[neighbour.ny][neighbour.nx] = true;
-            snake[sy][sx] = true;
             snake[neighbour.ny][neighbour.nx] = true;
             removeWall(cells, sx, sy, neighbour);
 
