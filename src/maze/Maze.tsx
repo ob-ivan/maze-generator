@@ -62,7 +62,7 @@ export const Maze: React.FC<MazeProps> = ({ maxX, maxY }) => {
                             {!cell.canWalkDown() && <div className="maze--wall-down"></div>}
                             {!cell.canWalkLeft() && <div className="maze--wall-left"></div>}
                             {items.find(item => item.x === x && item.y === y)?.face}
-                            {hero.x === x && hero.y === y && heroFace}
+                            {hero.x === x && hero.y === y && <div className="maze--hero">{heroFace}</div>}
                         </div>
                     ))}
                 </div>

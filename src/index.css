@@ -68,3 +68,10 @@ code {
     top: calc(0px - var(--border-width));
     height: calc(var(--cell-size) + 2 * var(--border-width));
 }
+
+.maze--hero {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
