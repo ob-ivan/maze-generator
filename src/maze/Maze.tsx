@@ -81,6 +81,7 @@ function generateLevel(maxX: number, maxY: number): Level {
     const cells: Cell[][] = [];
     const snake: boolean[][] = [];
     const visited: boolean[][] = [];
+    const deadEnds: Point[] = [];
 
     for (let y = 0; y < maxY; ++y) {
         cells[y] = [];
@@ -132,6 +133,7 @@ function generateLevel(maxX: number, maxY: number): Level {
             const neighbours = getNeighboursInBounds(sx, sy, maxX, maxY);
             const neighboursExcludeSnake = neighbours.filter(({ nx, ny }) => !snake[ny][nx] && !visited[ny][nx]);
             if (!neighboursExcludeSnake.length) {
+                deadEnds.push({ x: sx, y: sy });
                 break;
             }
             const neighbour = getRandomItem(neighboursExcludeSnake);
@@ -157,11 +159,10 @@ function generateLevel(maxX: number, maxY: number): Level {
         }
     }
 
-    const visitedPoints = visited.flatMap((row, y) => row.flatMap((visited, x) => (visited ? [{ x, y }] : [])));
     const items: Item[] = [];
 
     for (let i = 2; i > 0; --i) {
-        const itemPoint = getRandomItem(visitedPoints);
+        const itemPoint = getRandomItem(deadEnds);
         items.push({ ...itemPoint, face: getRandomItem(['🍰', '🍌', '🍗']) });
     }
 
