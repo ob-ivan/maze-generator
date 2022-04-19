@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import useKeypress from '../hooks/useKeypress';
+import { generateLevel } from '../maze/generateLevel';
 import { Cell } from '../types/Cell';
 import { Level, Point } from '../types/Level';
-import { generateLevel } from './generateLevel';
 
 const heroFace = '🧚';
 
