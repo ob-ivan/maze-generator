@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import useKeypress from '../hooks/useKeypress';
 import { generateLevel } from '../maze/generateLevel';
-import { Level, Point } from '../types/Level';
+import { Item, Level, Point } from '../types/Level';
+import { Inventory } from './Inventory';
 import { Maze } from './Maze';
 
 interface GameProps {
@@ -10,8 +11,8 @@ interface GameProps {
 }
 
 export const Game: React.FC<GameProps> = ({ maxX, maxY }) => {
-    const [level] = useState<Level>(generateLevel(maxX, maxY));
-    const { cells } = level;
+    const [level, setLevel] = useState<Level>(generateLevel(maxX, maxY));
+    const { cells, itemPoints } = level;
 
     const [hero, setHero] = useState<Point>({
         x: Math.floor(Math.random() * maxX),
@@ -38,5 +39,23 @@ export const Game: React.FC<GameProps> = ({ maxX, maxY }) => {
         }
     });
 
-    return <Maze level={level} hero={hero} />;
+    const [inventory, setInventory] = useState<Item[]>([]);
+    useKeypress(' ', () => {
+        const itemPoint = itemPoints.find(itemPoint => itemPoint.x === hero.x && itemPoint.y === hero.y);
+
+        // eslint-disable-next-line no-console
+        console.log('Game.tsx', 47, 'itemPoint', itemPoint);
+
+        if (itemPoint) {
+            setInventory([...inventory, { face: itemPoint.face }]);
+            setLevel({ ...level, itemPoints: itemPoints.filter(keep => keep !== itemPoint) });
+        }
+    });
+
+    return (
+        <div className="game">
+            <Maze level={level} hero={hero} />
+            <Inventory items={inventory} />
+        </div>
+    );
 };

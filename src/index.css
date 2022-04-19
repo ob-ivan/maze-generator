@@ -10,6 +10,13 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+/********* GAME **********/
+
+.game {
+    background: black;
+    display: flex;
+}
+
 /********* MAZE **********/
 
 .maze--table {
@@ -74,4 +81,13 @@ code {
     top: 0;
     left: 0;
     width: 100%;
+}
+
+/********* INVENTORY **********/
+
+.inventory {
+    background: white;
+    height: 30px;
+    margin: 30px;
+    width: 100px;
 }
