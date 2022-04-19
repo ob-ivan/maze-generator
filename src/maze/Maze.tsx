@@ -14,7 +14,7 @@ interface MazeProps {
 
 export const Maze: React.FC<MazeProps> = ({ maxX, maxY }) => {
     const [level] = useState<Level>(generateLevel(maxX, maxY));
-    const { cells, items } = level;
+    const { cells, itemPoints } = level;
 
     const [hero, setHero] = useState<Point>({
         x: Math.floor(Math.random() * maxX),
@@ -61,7 +61,7 @@ export const Maze: React.FC<MazeProps> = ({ maxX, maxY }) => {
                             {!cell.canWalkRight() && <div className="maze--wall-right"></div>}
                             {!cell.canWalkDown() && <div className="maze--wall-down"></div>}
                             {!cell.canWalkLeft() && <div className="maze--wall-left"></div>}
-                            {items.find(item => item.x === x && item.y === y)?.face}
+                            {itemPoints.find(item => item.x === x && item.y === y)?.face}
                             {hero.x === x && hero.y === y && <div className="maze--hero">{heroFace}</div>}
                         </div>
                     ))}

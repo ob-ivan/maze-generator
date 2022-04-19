@@ -1,5 +1,5 @@
 import { Cell } from '../types/Cell';
-import { Item, Level, Point } from '../types/Level';
+import { ItemPoint, Level, Point } from '../types/Level';
 
 type Direction = 'up' | 'right' | 'down' | 'left';
 
@@ -129,12 +129,12 @@ export function generateLevel(maxX: number, maxY: number): Level {
         }
     }
 
-    const items: Item[] = [];
+    const itemPoints: ItemPoint[] = [];
 
     for (let i = 2; i > 0; --i) {
-        const itemPoint = getRandomItem(deadEnds);
-        items.push({ ...itemPoint, face: getRandomItem(['🍰', '🍌', '🍗']) });
+        const point = getRandomItem(deadEnds);
+        itemPoints.push({ ...point, face: getRandomItem(['🍰', '🍌', '🍗']) });
     }
 
-    return { cells, maxX, maxY, items };
+    return { cells, maxX, maxY, itemPoints };
 }
